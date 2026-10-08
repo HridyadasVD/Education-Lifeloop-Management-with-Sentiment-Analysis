@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Edu Friend{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/edufriend.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <header class="site-header">
+    <div class="nav-shell">
+      <a class="brand" href="{% url 'index' %}">Edu <span>Friend</span></a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-label="Toggle menu">Menu</button>
+      <ul class="nav-links" data-nav-links>
+        <li><a href="{% url 'index' %}">Home</a></li>
+        <li><a href="{% url 'cariculam:course_list' %}">Courses</a></li>
+        {% if user.is_authenticated %}
+          <li><a href="{% url 'learning-path' %}">Learning Path</a></li>
+          <li><a href="{% url 'student-exam' %}">Exams</a></li>
+          <li><a href="{% url 'view-result' %}">Results</a></li>
+          <li><a href="{% url 'view_review' %}">Sentiment</a></li>
+          {% if user.is_superuser or user_role == 'teacher' %}
+            <li><a href="{% url 'exam:subject' %}">Exam Tools</a></li>
+          {% endif %}
+          {% if user.is_superuser %}
+            <li><a href="{% url 'admin:index' %}">Admin</a></li>
+          {% endif %}
+          <li><a href="{% url 'user_logout' %}">Logout</a></li>
+        {% else %}
+          <li><a href="{% url 'register' %}">Register</a></li>
+          <li><a class="nav-cta" href="{% url 'index' %}#login">Login</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    {% if messages %}
+      <div class="flash-stack">
+        {% for message in messages %}
+          <div class="alert {% if 'success' in message.tags %}alert-success{% elif 'warning' in message.tags or 'error' in message.tags %}alert-error{% else %}alert-info{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-shell">
+      <div><strong>Edu Friend</strong> — courses, exams, and a path shaped by your results.</div>
+      <div>Sentiment Lab stays separate from your Learning Path.</div>
+    </div>
+  </footer>
+
+  <script src="{% static 'js/edufriend.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

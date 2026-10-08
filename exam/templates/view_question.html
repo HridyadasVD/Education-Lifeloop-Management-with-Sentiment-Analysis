@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Questions | Edu Friend{% endblock %}
+{% block content %}
+<div class="section-head">
+  <h1>Question list</h1>
+  <p class="lede">Review and remove questions for this exam.</p>
+</div>
+<div class="table-wrap panel">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Question</th>
+        <th>Marks</th>
+        <th>Answer</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for question in questions %}
+        <tr>
+          <td>{{ question.question }}</td>
+          <td>{{ question.marks }}</td>
+          <td>{{ question.answer }}</td>
+          <td><a href="{% url 'delete_view' question.id %}">Delete</a></td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="4">No questions yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<a class="btn btn-ghost" style="margin-top:1rem;" href="{% url 'exam:question_view' %}">Back</a>
+{% endblock %}

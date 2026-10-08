@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Update lesson | Edu Friend{% endblock %}
+{% block content %}
+<div class="section-head">
+  <h1>Update lesson</h1>
+  <p class="lede">Adjust content and difficulty for path recommendations.</p>
+</div>
+<div class="panel form-panel" style="width:min(680px,100%);">
+  <form method="post" enctype="multipart/form-data" class="form-stack">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button class="btn btn-primary" type="submit">Update lesson</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}{{ courses.name }} | Edu Friend{% endblock %}
+{% block content %}
+<div class="section-head">
+  <h1>{{ courses.name }}</h1>
+  <p class="lede">{{ courses.description|default:"Choose a subject to open its lesson chapters." }}</p>
+</div>
+
+<div class="grid grid-3">
+  {% for subject in courses.subjects.all %}
+    <a class="card course-card" href="{% url 'cariculam:lesson_list' course=courses.slug slug=subject.slug %}">
+      <span class="eyebrow">Subject</span>
+      <h3>{{ subject.name }}</h3>
+      <p>{{ subject.description|default:"Open chapters and resources."|truncatechars:110 }}</p>
+    </a>
+  {% empty %}
+    <div class="empty-state panel" style="grid-column:1/-1;">No subjects in this course yet.</div>
+  {% endfor %}
+</div>
+{% endblock %}

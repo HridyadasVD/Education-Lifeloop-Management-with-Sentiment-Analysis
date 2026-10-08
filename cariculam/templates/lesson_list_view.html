@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}{{ subjects.name }} | Edu Friend{% endblock %}
+{% block content %}
+<div class="section-head">
+  <h1>{{ subjects.name }}</h1>
+  <p class="lede">{{ subjects.description|default:"Work through chapters in order. Difficulty tags feed your Learning Path." }}</p>
+</div>
+
+{% if user_role == 'teacher' or user.is_superuser %}
+  <div class="cta-row" style="margin-bottom:1rem;">
+    <a class="btn btn-primary" href="{% url 'cariculam:lesson_create' course=subjects.course.slug slug=subjects.slug %}">Add lesson</a>
+  </div>
+{% endif %}
+
+<div class="panel" style="padding:1rem;">
+  <ul class="chapter-list">
+    {% for lesson in subjects.lessons.all %}
+      <li>
+        <a href="{% url 'cariculam:lesson_detail' course=subjects.course.slug subject=subjects.slug slug=lesson.slug %}">
+          <span><strong>Ch {{ lesson.position }}.</strong> {{ lesson.name }}</span>
+          <span class="badge badge-{{ lesson.difficulty }}">{{ lesson.get_difficulty_display }}</span>
+        </a>
+      </li>
+    {% empty %}
+      <li class="empty-state">No lessons yet.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Questions | Edu Friend{% endblock %}
+{% block content %}
+<div class="section-head">
+  <h1>Question bank</h1>
+  <p class="lede">Add questions or browse existing ones by exam subject.</p>
+</div>
+<div class="grid grid-2">
+  <a class="card course-card" href="{% url 'exam:add_question_view' %}">
+    <span class="eyebrow">Create</span>
+    <h3>Add question</h3>
+    <p>Write a multiple-choice question for an exam subject.</p>
+  </a>
+  <a class="card course-card" href="{% url 'exam:question_view' %}">
+    <span class="eyebrow">Browse</span>
+    <h3>View questions</h3>
+    <p>Open the question list for each published exam.</p>
+  </a>
+</div>
+{% if msg1 %}<div class="alert alert-success" style="margin-top:1rem;">{{ msg1 }}</div>{% endif %}
+{% endblock %}

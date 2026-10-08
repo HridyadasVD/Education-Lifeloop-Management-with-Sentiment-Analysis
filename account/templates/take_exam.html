@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Exam brief | Edu Friend{% endblock %}
+{% block content %}
+<div class="panel" style="padding:1.5rem;max-width:640px;">
+  <span class="eyebrow">Before you begin</span>
+  <h1 class="page-title">{{ course.subject_name }}</h1>
+  <p class="lede">Review the exam brief, then start when you are ready. Your result updates the Learning Path.</p>
+  <ul>
+    <li><strong>Questions:</strong> {{ total_questions }}</li>
+    <li><strong>Total marks:</strong> {{ total_marks }}</li>
+    <li><strong>Pass mark:</strong> at least half of {{ course.total_marks }}</li>
+  </ul>
+  <div class="cta-row" style="margin-top:1.2rem;">
+    <a class="btn btn-primary" href="{% url 'start-exam' course.id %}">Start exam</a>
+    <a class="btn btn-ghost" href="{% url 'student-exam' %}">Back</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Register | Edu Friend{% endblock %}
+{% block content %}
+<div class="section-head">
+  <h1>Create your student account</h1>
+  <p class="lede">Join Edu Friend to take exams and unlock a personalized learning path.</p>
+</div>
+
+{% if registered %}
+  <div class="alert alert-success">Thank you for registering. You can log in from the home page.</div>
+  <a class="btn btn-primary" href="{% url 'index' %}#login">Go to login</a>
+{% else %}
+  <div class="panel form-panel" style="width:min(640px,100%);">
+    <form method="post" enctype="multipart/form-data" class="form-stack">
+      {% csrf_token %}
+      {{ user_form|crispy }}
+      {{ profile_form|crispy }}
+      <button class="btn btn-primary" type="submit">Register</button>
+    </form>
+  </div>
+{% endif %}
+{% endblock %}

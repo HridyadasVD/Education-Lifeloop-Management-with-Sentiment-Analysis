@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}View questions | Edu Friend{% endblock %}
+{% block content %}
+<div class="section-head">
+  <h1>View questions</h1>
+  <p class="lede">Choose an exam subject to inspect its question set.</p>
+</div>
+<div class="grid grid-3">
+  {% for subject in subjects %}
+    <a class="card exam-card" href="{% url 'view_question' subject.id %}">
+      <h3>{{ subject.subject_name }}</h3>
+      <p>{{ subject.question_number }} planned questions</p>
+    </a>
+  {% empty %}
+    <div class="empty-state panel" style="grid-column:1/-1;">No exam subjects found.</div>
+  {% endfor %}
+</div>
+{% endblock %}

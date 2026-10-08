@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Results | Edu Friend{% endblock %}
+{% block content %}
+<div class="section-head">
+  <h1>Your exam results</h1>
+  <p class="lede">Pick a subject to see your score history, then open Learning Path for specialized classes.</p>
+</div>
+
+<div class="grid grid-3">
+  {% for course in courses %}
+    <article class="card exam-card">
+      <span class="eyebrow">Results</span>
+      <h3>{{ course.subject_name }}</h3>
+      <p>{{ course.total_marks }} total marks</p>
+      <a class="btn btn-primary" href="{% url 'check-marks' course.id %}">View marks</a>
+    </article>
+  {% empty %}
+    <div class="empty-state panel" style="grid-column:1/-1;">No exam subjects found.</div>
+  {% endfor %}
+</div>
+
+<div class="cta-row" style="margin-top:1.4rem;">
+  <a class="btn btn-ghost" href="{% url 'learning-path' %}">Open learning path</a>
+</div>
+{% endblock %}

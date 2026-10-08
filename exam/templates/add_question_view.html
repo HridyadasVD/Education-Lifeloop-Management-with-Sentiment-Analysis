@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block title %}Add question | Edu Friend{% endblock %}
+{% block content %}
+<div class="section-head">
+  <h1>Add question</h1>
+  <p class="lede">Create a multiple-choice item for student exams.</p>
+</div>
+<div class="panel form-panel" style="width:min(680px,100%);">
+  <form method="post" class="form-stack" autocomplete="off">
+    {% csrf_token %}
+    <label>Exam subject
+      {% render_field questionForm.courseID class="form-control" %}
+    </label>
+    {% for field in questionForm %}
+      {% if field.name != 'courseID' %}
+        <label>{{ field.label }}
+          {% render_field field class="form-control" %}
+        </label>
+      {% endif %}
+    {% endfor %}
+    <button class="btn btn-primary" type="submit">Save question</button>
+  </form>
+</div>
+{% endblock %}

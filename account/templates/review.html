@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Sentiment Lab | Edu Friend{% endblock %}
+{% block content %}
+<div class="section-head">
+  <h1>Sentiment Lab</h1>
+  <p class="lede">Analyze feedback with VADER. This dashboard is separate from exam-based Learning Path recommendations.</p>
+</div>
+
+<div class="panel form-panel">
+  {% if msg %}<div class="alert alert-success">{{ msg }}</div>{% endif %}
+  <form class="form-stack" action="{% url 'review' %}" method="post">
+    {% csrf_token %}
+    <label>Student name
+      <input type="text" name="student" value="{{ default_student }}" required>
+    </label>
+    <label>Feedback / review
+      <textarea name="review" rows="5" required placeholder="Share how the course or lesson felt..."></textarea>
+    </label>
+    <button class="btn btn-primary" type="submit">Analyze sentiment</button>
+  </form>
+</div>
+{% endblock %}

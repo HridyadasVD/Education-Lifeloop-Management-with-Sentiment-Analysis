@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Exam tools | Edu Friend{% endblock %}
+{% block content %}
+<div class="section-head">
+  <h1>Exam tools</h1>
+  <p class="lede">Create and manage exam subjects for students.</p>
+</div>
+<div class="grid grid-2">
+  <a class="card course-card" href="{% url 'exam:add_subject' %}">
+    <span class="eyebrow">Create</span>
+    <h3>Add exam subject</h3>
+    <p>Publish a new subject exam with question and mark totals.</p>
+  </a>
+  <a class="card course-card" href="{% url 'exam:exam_subject' %}">
+    <span class="eyebrow">Manage</span>
+    <h3>View exam subjects</h3>
+    <p>Browse existing exams and remove ones you no longer need.</p>
+  </a>
+</div>
+{% endblock %}

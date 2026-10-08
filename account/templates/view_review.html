@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}Sentiment Lab | Edu Friend{% endblock %}
+{% block content %}
+<div class="section-head">
+  <h1>Sentiment Lab</h1>
+  <p class="lede">Analyze feedback with VADER. This does not change your Learning Path — exams do.</p>
+</div>
+
+<div class="cta-row" style="margin-bottom:1.2rem;">
+  <a class="btn btn-primary" href="{% url 'review' %}">Analyze new feedback</a>
+  <a class="btn btn-ghost" href="{% url 'learning-path' %}">Back to learning path</a>
+</div>
+
+{% if show_mine %}
+  <div class="panel" style="padding:1rem;margin-bottom:1.2rem;">
+    <h2 class="page-title" style="font-size:1.25rem;">Your recent feedback</h2>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Review</th>
+            <th>Compound</th>
+            <th>Polarity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in my_reviews|slice:":5" %}
+            <tr>
+              <td>{{ item.review|truncatechars:80 }}</td>
+              <td>{{ item.compound|floatformat:3 }}</td>
+              <td>
+                {% if item.polarity == 'positive' %}
+                  <span class="badge badge-pos">Positive</span>
+                {% elif item.polarity == 'negative' %}
+                  <span class="badge badge-neg">Negative</span>
+                {% else %}
+                  <span class="badge badge-neu">Neutral</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endif %}
+
+<div class="table-wrap panel">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th>Review</th>
+        <th>Compound</th>
+        <th>Polarity</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in review %}
+        <tr>
+          <td>{{ item.student }}</td>
+          <td>{{ item.review }}</td>
+          <td>{{ item.compound|floatformat:3 }}</td>
+          <td>
+            {% if item.polarity == 'positive' %}
+              <span class="badge badge-pos">Positive</span>
+            {% elif item.polarity == 'negative' %}
+              <span class="badge badge-neg">Negative</span>
+            {% else %}
+              <span class="badge badge-neu">Neutral</span>
+            {% endif %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="4">No sentiment records yet. Click “Analyze new feedback”.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

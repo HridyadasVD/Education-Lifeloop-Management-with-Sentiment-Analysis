@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Exams | Edu Friend{% endblock %}
+{% block content %}
+<div class="section-head">
+  <h1>Exam portal</h1>
+  <p class="lede">Take an exam, get PASS or FAIL, then open Learning Path for specialized classes. Sentiment Lab is separate — use it for feedback analysis.</p>
+</div>
+
+<div class="panel how-steps reveal" style="padding:1.1rem;margin-bottom:1.25rem;">
+  <ol class="steps-list">
+    <li><strong>1. Choose an exam</strong> with questions ready</li>
+    <li><strong>2. Submit answers</strong> — you will see your score</li>
+    <li><strong>3. Follow Learning Path</strong> for foundation or advanced lessons</li>
+  </ol>
+</div>
+
+{% if user_role == 'teacher' or user.is_superuser %}
+  <div class="cta-row" style="margin-bottom:1.2rem;">
+    <a class="btn btn-ghost" href="{% url 'all_mark' %}">Check student marks</a>
+    <a class="btn btn-ghost" href="{% url 'exam:subject' %}">Manage exam subjects</a>
+  </div>
+{% endif %}
+
+<div class="grid grid-3">
+  {% for item in courses %}
+    <article class="card exam-card">
+      <span class="eyebrow">Assessment</span>
+      <h3>{{ item.exam.subject_name }}</h3>
+      <p>
+        {{ item.question_count }} questions · {{ item.exam.total_marks }} total marks
+        {% if not item.ready %}
+          <br><span class="badge badge-neu">Not ready</span>
+        {% endif %}
+      </p>
+      {% if item.ready %}
+        <a class="btn btn-primary" href="{% url 'take-exam' item.exam.id %}">Take exam</a>
+      {% else %}
+        <button class="btn btn-ghost" type="button" disabled>Questions coming soon</button>
+      {% endif %}
+    </article>
+  {% empty %}
+    <div class="empty-state panel" style="grid-column:1/-1;">No exams have been published yet.</div>
+  {% endfor %}
+</div>
+
+<div class="cta-row" style="margin-top:1.4rem;">
+  <a class="btn btn-ghost" href="{% url 'learning-path' %}">My learning path</a>
+  <a class="btn btn-ghost" href="{% url 'view_review' %}">Sentiment lab</a>
+</div>
+{% endblock %}

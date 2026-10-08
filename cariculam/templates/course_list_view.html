@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Courses | Edu Friend{% endblock %}
+{% block content %}
+<div class="section-head">
+  <h1>Course catalog</h1>
+  <p class="lede">Explore programs, open subjects, and learn chapter by chapter.</p>
+</div>
+
+<div class="grid grid-3">
+  {% for course in courses %}
+    <a class="card course-card" href="{% url 'cariculam:subject_list' slug=course.slug %}">
+      <span class="eyebrow">Program</span>
+      <h3>{{ course.name }}</h3>
+      <p>{{ course.description|default:"No description yet."|truncatechars:120 }}</p>
+    </a>
+  {% empty %}
+    <div class="empty-state panel" style="grid-column:1/-1;">No courses published yet.</div>
+  {% endfor %}
+</div>
+{% endblock %}

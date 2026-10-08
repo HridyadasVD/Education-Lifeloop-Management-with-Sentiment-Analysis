@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.cursor/
+AI_HANDOFF.md
+media/
+*.mp4
+.DS_Store
+Thumbs.db
+db.sqlite3-journal

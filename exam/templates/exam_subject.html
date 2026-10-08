@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Exam subjects | Edu Friend{% endblock %}
+{% block content %}
+<div class="section-head">
+  <h1>Exam subjects</h1>
+  <p class="lede">Subjects available in the student exam portal.</p>
+</div>
+{% if msg1 %}<div class="alert alert-success">{{ msg1 }}</div>{% endif %}
+<div class="table-wrap panel">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Subject</th>
+        <th>Questions</th>
+        <th>Total marks</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for subject in subjects %}
+        <tr>
+          <td>{{ subject.subject_name }}</td>
+          <td>{{ subject.question_number }}</td>
+          <td>{{ subject.total_marks }}</td>
+          <td><a href="{% url 'delete_subject' subject.id %}">Delete</a></td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="4">No exam subjects yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<a class="btn btn-ghost" style="margin-top:1rem;" href="{% url 'exam:subject' %}">Back</a>
+{% endblock %}

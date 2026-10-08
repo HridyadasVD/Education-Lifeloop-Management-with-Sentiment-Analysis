@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}{{ lessons.name }} | Edu Friend{% endblock %}
+{% block content %}
+<div class="section-head">
+  <span class="eyebrow">{{ lessons.course.name }} · {{ lessons.subject.name }}</span>
+  <h1>{{ lessons.name }}</h1>
+  <p class="lede">Chapter {{ lessons.position }} · {{ lessons.get_difficulty_display }} · Created by {{ lessons.created_by }} on {{ lessons.created_at|date:"M j, Y" }}</p>
+</div>
+
+{% if user.is_authenticated %}
+  <div class="lesson-layout">
+    <aside class="panel" style="padding:1rem;height:fit-content;">
+      <h3 style="margin-top:0;">Chapters</h3>
+      <ul class="chapter-list">
+        {% for lesson in lessons.subject.lessons.all %}
+          <li>
+            <a class="{% if lesson.id == lessons.id %}is-active{% endif %}" href="{% url 'cariculam:lesson_detail' course=lessons.course.slug subject=lessons.subject.slug slug=lesson.slug %}">
+              <span>Ch {{ lesson.position }}. {{ lesson.name }}</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </aside>
+
+    <section>
+      {% if lessons.video %}
+        <div class="media-box">
+          <video controls>
+            <source src="{{ lessons.video.url }}" type="video/mp4">
+          </video>
+        </div>
+      {% endif %}
+
+      <div class="resource-links">
+        {% if lessons.ppt %}<a class="btn btn-ghost" href="{{ lessons.ppt.url }}" download>Download slides</a>{% endif %}
+        {% if lessons.notes %}<a class="btn btn-ghost" href="{{ lessons.notes.url }}" download>Download notes</a>{% endif %}
+        {% if lessons.video %}<a class="btn btn-ghost" href="{{ lessons.video.url }}" download>Download video</a>{% endif %}
+        {% if not lessons.ppt and not lessons.notes and not lessons.video %}
+          <div class="alert alert-info">No media files uploaded for this lesson yet.</div>
+        {% endif %}
+      </div>
+
+      {% if user_role == 'teacher' or user.is_superuser %}
+        <div class="cta-row" style="margin:1rem 0;">
+          <a class="btn btn-ghost" href="{% url 'cariculam:lesson_update' course=lessons.course.slug subject=lessons.subject.slug slug=lessons.slug %}">Update lesson</a>
+          <a class="btn btn-ghost" href="{% url 'cariculam:lesson_delete' course=lessons.course.slug subject=lessons.subject.slug slug=lessons.slug %}">Delete lesson</a>
+        </div>
+      {% endif %}
+
+      <div class="panel" style="padding:1.25rem;margin-top:1rem;">
+        <h2 class="page-title" style="font-size:1.4rem;">Discussion</h2>
+        <form method="post" class="form-stack" style="margin-bottom:1.2rem;">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <button class="btn btn-primary" type="submit" name="form" value="Add Comment">Add comment</button>
+        </form>
+
+        {% for comment in lessons.comments.all %}
+          <article style="padding:1rem 0;border-top:1px solid rgba(11,110,110,0.1);">
+            <strong>{{ comment.author }}</strong>
+            <span class="lede"> · {{ comment.date_added }}</span>
+            <p>{{ comment.body }}</p>
+            {% for reply in comment.replies.all %}
+              <div style="margin:0.6rem 0 0.6rem 1rem;padding:0.7rem;background:var(--sand);border-radius:12px;">
+                <strong>{{ reply.author }}</strong>
+                <span class="lede"> · {{ reply.date_added }}</span>
+                <p style="margin:0.35rem 0 0;">{{ reply.reply_body }}</p>
+              </div>
+            {% endfor %}
+            <form method="post" class="form-stack" style="margin-top:0.6rem;">
+              <input type="hidden" name="comment.id" value="{{ comment.id }}">
+              {% csrf_token %}
+              {{ form2.as_p }}
+              <button class="btn btn-ghost" type="submit" name="form2" value="Add Reply">Reply</button>
+            </form>
+          </article>
+        {% empty %}
+          <p class="lede">Be the first to leave feedback on this lesson.</p>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+{% else %}
+  <div class="alert alert-info">Please <a href="{% url 'index' %}#login"><strong>log in</strong></a> to view lesson media and discussion.</div>
+{% endif %}
+{% endblock %}

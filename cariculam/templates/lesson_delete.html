@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Delete lesson | Edu Friend{% endblock %}
+{% block content %}
+<div class="panel form-panel">
+  <h1 class="page-title" style="font-size:1.6rem;">Delete lesson</h1>
+  <p class="lede">Delete <strong>{{ lessons.name }}</strong>? This cannot be undone.</p>
+  <form method="post" class="cta-row">
+    {% csrf_token %}
+    <button class="btn btn-primary" type="submit">Confirm delete</button>
+    <a class="btn btn-ghost" href="{% url 'cariculam:lesson_detail' course=lessons.course.slug subject=lessons.subject.slug slug=lessons.slug %}">Cancel</a>
+  </form>
+</div>
+{% endblock %}

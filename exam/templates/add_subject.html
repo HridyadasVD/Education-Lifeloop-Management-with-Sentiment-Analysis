@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block title %}Add exam subject | Edu Friend{% endblock %}
+{% block content %}
+<div class="section-head">
+  <h1>Add exam subject</h1>
+  <p class="lede">Link an exam to a curriculum subject.</p>
+</div>
+<div class="panel form-panel" style="width:min(560px,100%);">
+  <form method="post" class="form-stack" autocomplete="off">
+    {% csrf_token %}
+    {% for field in courseForm %}
+      <label>{{ field.label }}
+        {% render_field field class="form-control" %}
+      </label>
+    {% endfor %}
+    <button class="btn btn-primary" type="submit">Save subject</button>
+  </form>
+</div>
+{% endblock %}

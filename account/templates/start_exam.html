@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}{{ course.subject_name }} Exam | Edu Friend{% endblock %}
+{% block content %}
+<div class="section-head">
+  <h1>{{ course.subject_name }}</h1>
+  <p class="lede">Select one option for each question, then submit.</p>
+</div>
+
+<form class="panel" style="padding:1.25rem;" autocomplete="off" onsubmit="return saveAns()" action="{% url 'calculate-marks' %}" method="post">
+  {% csrf_token %}
+  {% for q in questions %}
+    <div class="question-block">
+      <div style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+        <strong>{{ forloop.counter }}. {{ q.question }}</strong>
+        <span class="badge badge-standard">{{ q.marks }} marks</span>
+      </div>
+      <div class="option-row">
+        <label><input type="radio" name="{{ forloop.counter }}" value="Option1"> {{ q.option1 }}</label>
+        <label><input type="radio" name="{{ forloop.counter }}" value="Option2"> {{ q.option2 }}</label>
+        <label><input type="radio" name="{{ forloop.counter }}" value="Option3"> {{ q.option3 }}</label>
+        <label><input type="radio" name="{{ forloop.counter }}" value="Option4"> {{ q.option4 }}</label>
+      </div>
+    </div>
+  {% empty %}
+    <div class="empty-state">No questions are available for this exam.</div>
+  {% endfor %}
+  {% if questions %}
+    <button class="btn btn-primary" type="submit">Submit answers</button>
+  {% endif %}
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function saveAns() {
+  var inputs = document.getElementsByTagName('input');
+  for (var i = 0; i < inputs.length; i++) {
+    if (inputs[i].type === 'radio' && inputs[i].checked) {
+      setCookie(inputs[i].name, inputs[i].value, 3);
+    }
+  }
+  return true;
+}
+
+function setCookie(cname, cvalue, exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+  document.cookie = cname + '=' + cvalue + ';expires=' + d.toUTCString() + ';path=/';
+}
+</script>
+{% endblock %}

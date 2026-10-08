@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}All marks | Edu Friend{% endblock %}
+{% block content %}
+<div class="section-head">
+  <h1>All student marks</h1>
+  <p class="lede">Teacher overview of exam attempts across the platform.</p>
+</div>
+<div class="table-wrap panel">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th>Exam</th>
+        <th>Marks</th>
+        <th>Status</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for result in results %}
+        <tr>
+          <td>{{ result.student }}</td>
+          <td>{{ result.exam }}</td>
+          <td>{{ result.marks }}</td>
+          <td>
+            {% if result.status|upper == 'PASS' %}
+              <span class="badge badge-pass">{{ result.status }}</span>
+            {% else %}
+              <span class="badge badge-fail">{{ result.status }}</span>
+            {% endif %}
+          </td>
+          <td>{{ result.date }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5">No results yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

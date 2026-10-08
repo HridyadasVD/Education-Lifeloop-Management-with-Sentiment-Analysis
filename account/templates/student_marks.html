@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Student marks | Edu Friend{% endblock %}
+{% block content %}
+<div class="section-head">
+  <h1>Student marks</h1>
+  <p class="lede">Choose an exam subject to review marks.</p>
+</div>
+<div class="grid grid-3">
+  {% for course in courses %}
+    <a class="card exam-card" href="{% url 'check-marks' course.id %}">
+      <h3>{{ course.subject_name }}</h3>
+      <p>Open mark history</p>
+    </a>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,6 @@
+setuptools==70.3.0
+Django==3.2.25
+django-crispy-forms==1.14.0
+django-widget-tweaks==1.4.12
+vaderSentiment==3.3.2
+Pillow==10.4.0

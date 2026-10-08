@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}Edu Friend{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <h1 class="hero-brand">Edu <em>Friend</em></h1>
+    <p>Learn with guided courses, take exams, and unlock specialized classes from your results.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="{% url 'cariculam:course_list' %}">Browse courses</a>
+      {% if user.is_authenticated %}
+        <a class="btn btn-secondary" href="{% url 'learning-path' %}">Open learning path</a>
+      {% else %}
+        <a class="btn btn-secondary" href="#login">Start learning</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% if not user.is_authenticated %}
+<section class="login-split" id="login" style="margin-top:2rem;">
+  <div class="login-promo reveal">
+    <p class="eyebrow" style="color:#ffd7cb;">Student access</p>
+    <h2>Sign in to exams and your personalized path</h2>
+    <p>After each exam, Edu Friend builds a specialized class list — foundation support when you need it, advanced chapters when you pass.</p>
+  </div>
+  <div class="panel form-panel reveal">
+    <h2 class="page-title" style="font-size:1.6rem;">Login</h2>
+    {% if login_error %}
+      <div class="alert alert-error">{{ login_error }}</div>
+    {% endif %}
+    {% if msg %}
+      <div class="alert alert-success">{{ msg }}</div>
+    {% endif %}
+    <form class="form-stack" action="{% url 'user_login' %}" method="post">
+      {% csrf_token %}
+      <label>Username
+        <input type="text" name="username" required placeholder="Username" autocomplete="username">
+      </label>
+      <label>Password
+        <input type="password" name="password" required placeholder="Password" autocomplete="current-password">
+      </label>
+      <button class="btn btn-primary" type="submit">Login now</button>
+    </form>
+    <p class="lede" style="margin-top:1rem;">New here? <a href="{% url 'register' %}"><strong>Create a student account</strong></a></p>
+  </div>
+</section>
+{% else %}
+<section class="panel how-steps reveal" style="margin-top:2rem;padding:1.25rem;">
+  <h2 class="page-title" style="font-size:1.4rem;margin-top:0;">How Edu Friend works</h2>
+  <ol class="steps-list">
+    <li><strong>Browse courses</strong> and open chapter lessons</li>
+    <li><strong>Take exams</strong> to earn PASS or FAIL</li>
+    <li><strong>Open Learning Path</strong> for specialized foundation or advanced classes</li>
+    <li><strong>Use Sentiment Lab</strong> anytime to analyze feedback (separate from recommendations)</li>
+  </ol>
+</section>
+<section style="margin-top:1.25rem;" class="grid grid-3">
+  <a class="card course-card" href="{% url 'cariculam:course_list' %}">
+    <span class="eyebrow">Catalog</span>
+    <h3>Courses</h3>
+    <p>Browse subjects and chapter-based lessons like a modern learning platform.</p>
+  </a>
+  <a class="card course-card" href="{% url 'student-exam' %}">
+    <span class="eyebrow">Assessment</span>
+    <h3>Exams</h3>
+    <p>Practice, submit, and unlock recommendations for foundation or advanced work.</p>
+  </a>
+  <a class="card course-card" href="{% url 'learning-path' %}">
+    <span class="eyebrow">Personalized</span>
+    <h3>Learning Path</h3>
+    <p>Specialized next classes chosen from your exam PASS and FAIL results.</p>
+  </a>
+</section>
+<div class="cta-row" style="margin-top:1rem;">
+  <a class="btn btn-ghost" href="{% url 'view_review' %}">Open sentiment lab</a>
+  <a class="btn btn-ghost" href="{% url 'view-result' %}">View my results</a>
+</div>
+{% endif %}
+{% endblock %}
